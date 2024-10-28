@@ -98,7 +98,7 @@ public class SlideshowFragment extends Fragment {
                 int success = response.getInt("success");
                 Log.e("response", "==" + success);
                 if(success == 1 ){
-                    Log.e("response", "==" + response);
+                    Log.e("response", "===" + response);
                 }
             } catch (JSONException e) {
                 throw new RuntimeException(e);
