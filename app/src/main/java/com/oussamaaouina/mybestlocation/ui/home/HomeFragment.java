@@ -1,5 +1,7 @@
 package com.oussamaaouina.mybestlocation.ui.home;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +15,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
 import com.oussamaaouina.mybestlocation.Config;
@@ -39,6 +42,8 @@ public class HomeFragment extends Fragment {
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+        Download de = new Download();
+        de.execute();
         binding.downloadBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -49,10 +54,12 @@ public class HomeFragment extends Fragment {
         final TextView textView = binding.textHome;
         listView = binding.listLocations;
 
-
+        ActivityCompat.requestPermissions(this.getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
 
         return root;
     }
+
+
 
     @Override
     public void onDestroyView() {
@@ -119,5 +126,24 @@ public class HomeFragment extends Fragment {
                     data));
 
         }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 1) {
+            if(grantResults.length > 0){
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permission granted
+                    Toast.makeText(this.getContext(),"Permission granted",Toast.LENGTH_SHORT).show();
+                }
+            }
+            else {
+                // Permission denied
+                Toast.makeText(this.getContext(), "Permission denied", Toast.LENGTH_SHORT).show();
+
+            }
+        }
+
     }
 }

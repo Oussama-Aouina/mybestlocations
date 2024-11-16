@@ -1,5 +1,16 @@
 package com.oussamaaouina.mybestlocation.ui.slideshow;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Criteria;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,26 +20,38 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.oussamaaouina.mybestlocation.Config;
 import com.oussamaaouina.mybestlocation.JSONParser;
+import com.oussamaaouina.mybestlocation.MainActivity;
 import com.oussamaaouina.mybestlocation.Position;
 import com.oussamaaouina.mybestlocation.databinding.FragmentSlideshowBinding;
+import com.oussamaaouina.mybestlocation.ui.home.HomeFragment;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 
 import kotlin.reflect.KParameter;
 
-public class SlideshowFragment extends Fragment {
+public class SlideshowFragment extends Fragment implements LocationListener{
+    FusedLocationProviderClient fusedLocationProviderClient;
+    private final static int REQUEST_CODE = 100;
 
     private FragmentSlideshowBinding binding;
 
@@ -39,7 +62,16 @@ public class SlideshowFragment extends Fragment {
         binding = FragmentSlideshowBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
         Button add = binding.addBtn;
+        Button map = binding.mapBtn;
 
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(inflater.getContext());
+        map.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                getLastLocation();
+                showLocation();
+            }
+        });
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -52,9 +84,57 @@ public class SlideshowFragment extends Fragment {
 
                 Upload u = new Upload(params);
                 u.execute();
+                binding.textLongitude.setText("");
+                binding.textLatitude.setText("");
+                binding.textNumero.setText("");
+                binding.textPseudo.setText("");
+
+                // i want to return to the home fragment
+                Intent intent = new Intent(getActivity(), MainActivity.class);
+                startActivity(intent);
+
             }
         });
         return root;
+    }
+
+    // show realtime location
+    @SuppressLint("MissingPermission")
+    public void showLocation(){
+
+        LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+            Log.e("location","gps is enabled");
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,6000,0, this);
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,10, this);
+        }else{
+            Toast.makeText(getContext(), "Please turn on your GPS location", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+            startActivity(intent);
+        }
+    }
+
+    private void getLastLocation() {
+        if(ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ){
+            fusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+                @Override
+                public void onSuccess(Location location) {
+                    if (location != null) {
+                        Log.e("location","location: " + location.getLatitude() + " " + location.getLongitude());
+                        Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
+                        try {
+                            List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+                            Log.e("location address", "address:" + addresses.get(0).getAddressLine(0));
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                        binding.textLatitude.setText(String.valueOf(location.getLatitude()));
+                        binding.textLongitude.setText(String.valueOf(location.getLongitude()));
+                    }
+
+                }
+            });
+        }
     }
 
     @Override
@@ -63,6 +143,36 @@ public class SlideshowFragment extends Fragment {
         binding = null;
     }
     AlertDialog alert;
+
+    @Override
+    public void onLocationChanged(@NonNull Location location) {
+        Log.e("Location change:", location.toString());
+    }
+
+    @Override
+    public void onLocationChanged(@NonNull List<Location> locations) {
+        LocationListener.super.onLocationChanged(locations);
+    }
+
+    @Override
+    public void onFlushComplete(int requestCode) {
+        LocationListener.super.onFlushComplete(requestCode);
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+        LocationListener.super.onStatusChanged(provider, status, extras);
+    }
+
+    @Override
+    public void onProviderEnabled(@NonNull String provider) {
+        LocationListener.super.onProviderEnabled(provider);
+    }
+
+    @Override
+    public void onProviderDisabled(@NonNull String provider) {
+        LocationListener.super.onProviderDisabled(provider);
+    }
 
     class Upload extends AsyncTask {
         HashMap<String,String> params;
@@ -111,8 +221,6 @@ public class SlideshowFragment extends Fragment {
             // UI Thread (Thread principal)
             super.onPostExecute(o);
             alert.dismiss();
-
-
         }
     }
 }
