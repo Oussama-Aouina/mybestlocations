@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
-import android.location.Criteria;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
@@ -17,16 +16,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -34,11 +30,9 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.oussamaaouina.mybestlocation.Config;
 import com.oussamaaouina.mybestlocation.JSONParser;
 import com.oussamaaouina.mybestlocation.MainActivity;
-import com.oussamaaouina.mybestlocation.Position;
+import com.oussamaaouina.mybestlocation.MapsActivity;
 import com.oussamaaouina.mybestlocation.databinding.FragmentSlideshowBinding;
-import com.oussamaaouina.mybestlocation.ui.home.HomeFragment;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -46,8 +40,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-
-import kotlin.reflect.KParameter;
 
 public class SlideshowFragment extends Fragment implements LocationListener{
     FusedLocationProviderClient fusedLocationProviderClient;
@@ -63,8 +55,11 @@ public class SlideshowFragment extends Fragment implements LocationListener{
         View root = binding.getRoot();
         Button add = binding.addBtn;
         Button map = binding.mapBtn;
+        Button back = binding.backBtn;
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(inflater.getContext());
+
+        // getting the current location
         map.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -72,6 +67,8 @@ public class SlideshowFragment extends Fragment implements LocationListener{
                 showLocation();
             }
         });
+
+        // saving the new position
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -95,8 +92,25 @@ public class SlideshowFragment extends Fragment implements LocationListener{
 
             }
         });
+
+        // setting the position from the map
+//        back.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent maps = new Intent(getActivity(), MapsActivity.class);
+//                maps.putExtra("longitude",binding.textLongitude.getText().toString());
+//                maps.putExtra("latitude",binding.textLatitude.getText().toString());
+//                startActivity(maps);
+//            }
+//        });
+
+        showLocation();
+
         return root;
     }
+
+
+
 
     // show realtime location
     @SuppressLint("MissingPermission")
@@ -105,8 +119,8 @@ public class SlideshowFragment extends Fragment implements LocationListener{
         LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
         if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
             Log.e("location","gps is enabled");
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,6000,0, this);
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,10, this);
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0, this);
+
         }else{
             Toast.makeText(getContext(), "Please turn on your GPS location", Toast.LENGTH_LONG).show();
             Intent intent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
@@ -147,6 +161,9 @@ public class SlideshowFragment extends Fragment implements LocationListener{
     @Override
     public void onLocationChanged(@NonNull Location location) {
         Log.e("Location change:", location.toString());
+        binding.textLatitude.setText(String.valueOf(location.getLatitude()));
+        binding.textLongitude.setText(String.valueOf(location.getLongitude()));
+
     }
 
     @Override
