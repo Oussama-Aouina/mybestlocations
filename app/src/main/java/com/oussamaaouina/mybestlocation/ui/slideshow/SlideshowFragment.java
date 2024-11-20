@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -20,18 +21,21 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.oussamaaouina.mybestlocation.Config;
 import com.oussamaaouina.mybestlocation.JSONParser;
-import com.oussamaaouina.mybestlocation.MainActivity;
-import com.oussamaaouina.mybestlocation.MapsActivity;
+import com.oussamaaouina.mybestlocation.R;
 import com.oussamaaouina.mybestlocation.databinding.FragmentSlideshowBinding;
+import com.oussamaaouina.mybestlocation.ui.home.HomeFragment;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -41,87 +45,107 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
-public class SlideshowFragment extends Fragment implements LocationListener{
-    FusedLocationProviderClient fusedLocationProviderClient;
-    private final static int REQUEST_CODE = 100;
+public class SlideshowFragment extends Fragment implements LocationListener {
 
+    FusedLocationProviderClient fusedLocationProviderClient;
     private FragmentSlideshowBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-
-
         binding = FragmentSlideshowBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+
         Button add = binding.addBtn;
         Button map = binding.mapBtn;
         Button back = binding.backBtn;
 
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(inflater.getContext());
+        showLocation();
 
-        // getting the current location
-        map.setOnClickListener(new View.OnClickListener() {
+        // Handle "Show Location" button click
+        back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                getLastLocation();
-                showLocation();
+                NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_content_main);
+                navController.navigate(R.id.nav_home);
+
             }
         });
 
-        // saving the new position
+        // Handle "Save Position" button click
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                HashMap<String,String> params = new HashMap<>();
+                if (isAdded()) { // Check if the fragment is currently added to its activity
+                    HashMap<String, String> params = new HashMap<>();
+                    params.put("longitude", binding.textLongitude.getText().toString());
+                    params.put("latitude", binding.textLatitude.getText().toString());
+                    params.put("numero", binding.textNumero.getText().toString());
+                    params.put("pseudo", binding.textPseudo.getText().toString());
+                    Log.e("params", "==" + params);
 
-                params.put("longitude",binding.textLongitude.getText().toString());
-                params.put("latitude",binding.textLatitude.getText().toString());
-                params.put("numero",binding.textNumero.getText().toString());
-                params.put("pseudo",binding.textPseudo.getText().toString());
+                    // Execute the Upload task
+                    Upload u = new Upload(params);
+                    u.execute();
 
-                Upload u = new Upload(params);
-                u.execute();
-                binding.textLongitude.setText("");
-                binding.textLatitude.setText("");
-                binding.textNumero.setText("");
-                binding.textPseudo.setText("");
+                    // Clear input fields
+                    binding.textLongitude.setText("");
+                    binding.textLatitude.setText("");
+                    binding.textNumero.setText("");
+                    binding.textPseudo.setText("");
 
-                // i want to return to the home fragment
-                Intent intent = new Intent(getActivity(), MainActivity.class);
-                startActivity(intent);
-
+                    // Clear back stack and navigate to HomeFragment
+//                    FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+//                    fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+//                    fragmentManager.beginTransaction()
+//                            .replace(R.id.nav_host_fragment_content_main, new HomeFragment())
+//                            .commit(); // Use commitAllowingStateLoss()
+                    NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_content_main);
+                    navController.navigate(R.id.nav_home);
+                }
             }
         });
 
-        // setting the position from the map
-//        back.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent maps = new Intent(getActivity(), MapsActivity.class);
-//                maps.putExtra("longitude",binding.textLongitude.getText().toString());
-//                maps.putExtra("latitude",binding.textLatitude.getText().toString());
-//                startActivity(maps);
-//            }
-//        });
-
-        showLocation();
+        // Handle "Back to Map" button click
+        map.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent maps = new Intent(getActivity(), MapsActivity.class);
+                maps.putExtra("longitude", binding.textLongitude.getText().toString());
+                maps.putExtra("latitude", binding.textLatitude.getText().toString());
+                startActivityForResult(maps, 1);
+            }
+        });
 
         return root;
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == 1) {
+            String dataString = data.getDataString();
+            Log.e("position_received:", dataString);
+            String[] parts = dataString.split("&");
+            // Extract the values from the parts
+            String marker_lat = parts[0].split("=")[1];
+            String marker_lng = parts[1].split("=")[1];
+            binding.textLatitude.setText(marker_lat);
+            binding.textLongitude.setText(marker_lng);
+        }
 
+    }
 
 
     // show realtime location
     @SuppressLint("MissingPermission")
-    public void showLocation(){
+    public void showLocation() {
 
         LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-        if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
-            Log.e("location","gps is enabled");
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0, this);
+        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            Log.e("location", "gps is enabled");
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 60000, 0, this);
 
-        }else{
+        } else {
             Toast.makeText(getContext(), "Please turn on your GPS location", Toast.LENGTH_LONG).show();
             Intent intent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
             startActivity(intent);
@@ -129,12 +153,12 @@ public class SlideshowFragment extends Fragment implements LocationListener{
     }
 
     private void getLastLocation() {
-        if(ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ){
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             fusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
                 @Override
                 public void onSuccess(Location location) {
                     if (location != null) {
-                        Log.e("location","location: " + location.getLatitude() + " " + location.getLongitude());
+                        Log.e("location", "location: " + location.getLatitude() + " " + location.getLongitude());
                         Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
                         try {
                             List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
@@ -154,16 +178,23 @@ public class SlideshowFragment extends Fragment implements LocationListener{
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        binding = null;
+        // Unregister the location listener
+        LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        if (locationManager != null) {
+            locationManager.removeUpdates(this);
+        }
+        binding = null; // Set binding to null to avoid memory leaks
     }
-    AlertDialog alert;
 
     @Override
     public void onLocationChanged(@NonNull Location location) {
         Log.e("Location change:", location.toString());
-        binding.textLatitude.setText(String.valueOf(location.getLatitude()));
-        binding.textLongitude.setText(String.valueOf(location.getLongitude()));
-
+        if (binding != null) { // Check if binding is not null
+            binding.textLatitude.setText(String.valueOf(location.getLatitude()));
+            binding.textLongitude.setText(String.valueOf(location.getLongitude()));
+        } else {
+            Log.e("SlideshowFragment", "Binding is null, cannot update UI.");
+        }
     }
 
     @Override
@@ -191,9 +222,13 @@ public class SlideshowFragment extends Fragment implements LocationListener{
         LocationListener.super.onProviderDisabled(provider);
     }
 
+    AlertDialog alert;
+
+    // saving the informations
     class Upload extends AsyncTask {
-        HashMap<String,String> params;
-        public Upload(HashMap<String,String> params) {
+        HashMap<String, String> params;
+
+        public Upload(HashMap<String, String> params) {
             this.params = params;
         }
 
@@ -224,7 +259,7 @@ public class SlideshowFragment extends Fragment implements LocationListener{
             try {
                 int success = response.getInt("success");
                 Log.e("response", "==" + success);
-                if(success == 1 ){
+                if (success == 1) {
                     Log.e("response", "===" + response);
                 }
             } catch (JSONException e) {

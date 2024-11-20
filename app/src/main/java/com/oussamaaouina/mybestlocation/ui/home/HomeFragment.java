@@ -96,6 +96,7 @@ public class HomeFragment extends Fragment {
                 int success = response.getInt("success");
                 Log.e("response", "==" + success);
                 if(success == 1 ){
+                    data.clear();
                     JSONArray positions=response.getJSONArray("positions");
                     Log.e("response", "==" + response);
                     for (int i = 0; i < positions.length(); i++) {
