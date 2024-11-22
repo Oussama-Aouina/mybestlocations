@@ -4,43 +4,53 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
+    android:background="@color/backgroundColor"
     android:gravity="center"
     android:orientation="vertical"
+    android:padding="16dp"
     tools:context=".ui.slideshow.SlideshowFragment">
 
     <EditText
         android:id="@+id/text_pseudo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="12dp"
         android:background="@drawable/edittext_background"
         android:ems="10"
         android:hint="Pseudo"
         android:inputType="text"
-        android:padding="12dp" />
+        android:padding="12dp"
+        android:textColorHint="@color/secondaryTextColor"
+        android:textColor="@color/primaryTextColor"
+        android:fontFamily="sans-serif-medium"/>
 
     <EditText
         android:id="@+id/text_numero"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="12dp"
         android:background="@drawable/edittext_background"
         android:ems="10"
         android:hint="Numero"
         android:inputType="text"
-        android:padding="12dp" />
+        android:padding="12dp"
+        android:textColorHint="@color/secondaryTextColor"
+        android:textColor="@color/primaryTextColor"
+        android:fontFamily="sans-serif-medium"/>
 
     <EditText
         android:id="@+id/text_longitude"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="12dp"
         android:background="@drawable/edittext_background"
         android:ems="10"
         android:hint="Longitude"
         android:inputType="text"
-        android:padding="12dp" />
+        android:padding="12dp"
+        android:textColorHint="@color/secondaryTextColor"
+        android:textColor="@color/primaryTextColor"
+        android:fontFamily="sans-serif-medium"/>
 
     <EditText
         android:id="@+id/text_latitude"
@@ -51,34 +61,48 @@
         android:ems="10"
         android:hint="Latitude"
         android:inputType="text"
-        android:padding="12dp" />
-
+        android:padding="12dp"
+        android:textColorHint="@color/secondaryTextColor"
+        android:textColor="@color/primaryTextColor"
+        android:fontFamily="sans-serif-medium"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_marginTop="16dp">
 
         <Button
             android:id="@+id/back_btn"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Back" />
+            android:backgroundTint="@color/primaryColor"
+            android:textColor="@color/white"
+            android:text="Back"
+            android:padding="12dp"
+            android:layout_marginEnd="8dp"/>
 
         <Button
             android:id="@+id/map_btn"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Map" />
+            android:backgroundTint="@color/primaryColor"
+            android:textColor="@color/white"
+            android:text="Map"
+            android:padding="12dp"
+            android:layout_marginEnd="8dp"/>
 
         <Button
             android:id="@+id/add_btn"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="ADD" />
+            android:backgroundTint="@color/primaryColor"
+            android:textColor="@color/white"
+            android:text="ADD"
+            android:padding="12dp"/>
     </LinearLayout>
 
 </LinearLayout>

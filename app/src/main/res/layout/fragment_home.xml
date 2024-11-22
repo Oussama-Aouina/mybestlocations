@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F6F1F1"
@@ -9,25 +10,156 @@
     tools:context=".ui.home.HomeFragment">
 
     <TextView
-        android:id="@+id/text_home"
-        android:layout_width="match_parent"
-        android:layout_height="39dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:text="List position"
-        android:textAlignment="center"
-        android:textSize="24sp"
-        android:textStyle="bold" />
-
-    <Button
-        android:id="@+id/download_btn"
+        android:id="@+id/textView2"
+        style="@style/style_titre_1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Download" />
+        android:layout_marginBottom="14dp"
+        android:paddingTop="40dp"
+        android:text="Best Locations"
+        android:textColor="@color/primaryColor" />
 
-    <ListView
-        android:id="@+id/list_locations"
+<!-- Search position-->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/auth_name_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:hint="search"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        app:hintTextAppearance="@style/TextAppearance.AppCompat.Small">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/search_position"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:textSize="16sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!--Download button -->
+
+    <!--
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_positions"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+        -->
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- Your RecyclerView -->
+
+
+        <!-- Add Floating Action Button (or ImageView) at the bottom-right corner -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_positions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="90dp"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:divider="@color/primaryTextColor"
+            android:dividerHeight="3dp"
+            android:scrollbars="vertical" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:orientation="vertical"
+            android:paddingRight="10dp"
+            android:paddingBottom="10dp">
+
+            <ImageView
+                android:id="@+id/add_location_button"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_gravity="bottom|end"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:elevation="8dp"
+                android:paddingLeft="0dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:src="@drawable/ic_add_contact" />
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Add Location"
+                android:textAlignment="center"
+                android:textColor="@color/primaryColor" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_vertical"
+            android:orientation="vertical"
+            android:paddingBottom="10dp">
+
+            <ImageView
+                android:id="@+id/refresh_button"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:elevation="8dp"
+                android:paddingLeft="0dp"
+                android:paddingTop="2dp"
+                android:paddingBottom="7dp"
+                android:src="@drawable/refresh" />
+
+            <TextView
+                android:id="@+id/textview5"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Refresh"
+                android:textAlignment="center"
+                android:textColor="@color/primaryColor" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center|center_vertical"
+            android:orientation="vertical"
+            android:paddingBottom="10dp"
+            android:textAlignment="center">
+
+            <ImageView
+                android:id="@+id/map_list_button"
+                android:layout_width="91dp"
+                android:layout_height="78dp"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="10dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription=""
+                android:elevation="8dp"
+                android:src="@drawable/mapview" />
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="View in Map"
+                android:textAlignment="center"
+                android:textColor="@color/purple_700" />
+
+        </LinearLayout>
+
+    </FrameLayout>
+
 </LinearLayout>
