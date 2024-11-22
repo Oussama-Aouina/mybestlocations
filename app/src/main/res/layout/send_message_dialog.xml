@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/rounded_corners"
+    android:padding="16dp">
+
+    <!-- message Field -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded_corners"
+        android:orientation="horizontal"
+        android:paddingBottom="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="To: "
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/dialog_msg_reciever"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="to:"
+            android:textColor="#3F3F3F"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/dialog_msg_content"
+        android:layout_width="match_parent"
+        android:layout_height="213dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/edittext_background"
+        android:ems="10"
+        android:gravity="start"
+        android:hint="write something..."
+        android:inputType="text"
+        android:padding="12dp"
+        android:textColor="@android:color/black"
+        android:textSize="16sp" />
+
+
+    <!-- Save Button -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <!-- Filled button style -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/dialog_send_button"
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:backgroundTint="@color/primaryColor"
+            android:text="Send"
+            android:textColor="@color/white" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/dialog_cancel_msg"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/white"
+            android:text="Cancel"
+            android:textColor="@color/primaryColor" />
+    </LinearLayout>
+
+</LinearLayout>
