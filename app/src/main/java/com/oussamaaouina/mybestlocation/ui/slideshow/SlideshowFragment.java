@@ -44,7 +44,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-
+import java.util.LinkedHashMap;
 public class SlideshowFragment extends Fragment implements LocationListener {
 
     FusedLocationProviderClient fusedLocationProviderClient;
@@ -75,8 +75,8 @@ public class SlideshowFragment extends Fragment implements LocationListener {
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isAdded()) { // Check if the fragment is currently added to its activity
-                    HashMap<String, String> params = new HashMap<>();
+                 // Check if the fragment is currently added to its activity
+                    LinkedHashMap<String, String> params = new LinkedHashMap<>();
                     params.put("longitude", binding.textLongitude.getText().toString());
                     params.put("latitude", binding.textLatitude.getText().toString());
                     params.put("numero", binding.textNumero.getText().toString());
@@ -86,22 +86,6 @@ public class SlideshowFragment extends Fragment implements LocationListener {
                     // Execute the Upload task
                     Upload u = new Upload(params);
                     u.execute();
-
-                    // Clear input fields
-                    binding.textLongitude.setText("");
-                    binding.textLatitude.setText("");
-                    binding.textNumero.setText("");
-                    binding.textPseudo.setText("");
-
-                    // Clear back stack and navigate to HomeFragment
-//                    FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-//                    fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-//                    fragmentManager.beginTransaction()
-//                            .replace(R.id.nav_host_fragment_content_main, new HomeFragment())
-//                            .commit(); // Use commitAllowingStateLoss()
-                    NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_content_main);
-                    navController.navigate(R.id.nav_home);
-                }
             }
         });
 
@@ -246,7 +230,7 @@ public class SlideshowFragment extends Fragment implements LocationListener {
         protected Object doInBackground(Object[] objects) {
             // Code de thread secondaire (background)
             try {
-                Thread.sleep(500);
+                Thread.sleep(600);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
@@ -273,6 +257,12 @@ public class SlideshowFragment extends Fragment implements LocationListener {
             // UI Thread (Thread principal)
             super.onPostExecute(o);
             alert.dismiss();
+            binding.textLongitude.setText("");
+            binding.textLatitude.setText("");
+            binding.textNumero.setText("");
+            binding.textPseudo.setText("");
+            NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_content_main);
+            navController.navigate(R.id.nav_home);
         }
     }
 }
