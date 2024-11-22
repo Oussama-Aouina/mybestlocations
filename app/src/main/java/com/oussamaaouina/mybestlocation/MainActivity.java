@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         setSupportActionBar(binding.appBarMain.toolbar);
+        binding.appBarMain.fab.setVisibility(View.INVISIBLE);
         binding.appBarMain.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -69,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
+
 
 }
 
