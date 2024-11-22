@@ -1,0 +1,10 @@
+<!-- res/drawable/rounded_corners.xml -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="@android:color/white" /> <!-- Background color of your layout -->
+    <corners android:radius="30dp" /> <!-- Adjust corner radius here -->
+    <padding
+        android:left="8dp"
+        android:right="8dp"
+        android:top="8dp"
+        android:bottom="8dp" /> <!-- Optional padding inside the layout -->
+</shape>
