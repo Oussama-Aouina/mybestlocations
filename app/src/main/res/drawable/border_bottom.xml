@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <!-- The content background -->
+        <shape android:shape="rectangle">
+            <solid android:color="@color/dividerColor" /> <!-- Background color -->
+        </shape>
+    </item>
+
+    <item android:bottom="2dp">
+        <!-- The border at the bottom -->
+        <shape android:shape="rectangle">
+            <solid android:color="@color/backgroundColor" /> <!-- Border color -->
+        </shape>
+    </item>
+</layer-list>
