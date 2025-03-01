@@ -1,6 +1,6 @@
 package com.oussamaaouina.mybestlocation.ui.home;
 
-import static android.app.PendingIntent.getActivity;
+import static androidx.core.app.ActivityCompat.startActivityForResult;
 
 import android.content.Context;
 import android.content.Intent;
@@ -25,8 +25,7 @@ import com.oussamaaouina.mybestlocation.Config;
 import com.oussamaaouina.mybestlocation.JSONParser;
 import com.oussamaaouina.mybestlocation.Position;
 import com.oussamaaouina.mybestlocation.R;
-import com.oussamaaouina.mybestlocation.ui.home.HomeFragment;
-
+import com.oussamaaouina.mybestlocation.ui.slideshow.MapsActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,15 +33,15 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class PositionRecyclerAdapter extends RecyclerView.Adapter<PositionRecyclerAdapter.MyViewHolder>{
+public class PositionRecyclerAdapter extends RecyclerView.Adapter<PositionRecyclerAdapter.MyViewHolder> {
     Context con;
     ArrayList<Position> data;
 
-public PositionRecyclerAdapter(Context con, ArrayList<Position> data) {
-    this.con = con;
-    this.data = data;
+    public PositionRecyclerAdapter(Context con, ArrayList<Position> data) {
+        this.con = con;
+        this.data = data;
 
-}
+    }
 
     @NonNull
     @Override
@@ -51,8 +50,8 @@ public PositionRecyclerAdapter(Context con, ArrayList<Position> data) {
 
 
         //creation d'un view
-        LayoutInflater inflater =LayoutInflater.from(con);
-        View v= inflater.inflate(R.layout.position_recycler,null);
+        LayoutInflater inflater = LayoutInflater.from(con);
+        View v = inflater.inflate(R.layout.position_recycler, null);
         return new MyViewHolder(v);
     }
 
@@ -95,41 +94,32 @@ public PositionRecyclerAdapter(Context con, ArrayList<Position> data) {
                         .setMessage("Are you sure you want to delete this location?")
                         .setPositiveButton("Yes", (dialog, which) -> {
                             new Delete(c.id).execute(); // Execute delete task
+                            Toast.makeText(con, "Position deleted", Toast.LENGTH_SHORT).show();
+                            data.remove(index);
                         })
                         .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
                         .show();
-                 //indice de l'element selectionné
 
-                data.remove(index);
-//                Delete d = new Delete(c.id);
-//                d.execute();
-                Toast.makeText(con, "Position deleted", Toast.LENGTH_SHORT).show();
                 notifyDataSetChanged();
 
             }
         });
 
 
-        // Edit contact
+        // view in map
         holder.mapIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder alert = new AlertDialog.Builder(con);
-                alert.setTitle("Edit Position");
-                alert.setMessage("Are you sure you want to edit this contact?");
-
-
-
-
-                // Create and show the dialog
-                AlertDialog dialog = alert.create();
-                dialog.show();
-
-
-
-
+                int index = holder.getAdapterPosition();
+                Position c = data.get(index);
+                Intent maps = new Intent(con, ViewPositionActivity.class);
+                maps.putExtra("longitude", c.longitude.toString());
+                maps.putExtra("latitude", c.latitude.toString());
+                con.startActivity(maps);
             }
-        });    }
+        });
+    }
+
 
     private void showMessageDialog(Position bestlocation) {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(con);
@@ -154,7 +144,7 @@ public PositionRecyclerAdapter(Context con, ArrayList<Position> data) {
             String message = msgContent.getText().toString();
             // Do something with the message (send it, store it, etc.)
             SmsManager smsManager = SmsManager.getDefault();
-            smsManager.sendTextMessage(bestlocation.numero,null,message,null,null);
+            smsManager.sendTextMessage('+'+bestlocation.numero, null, message, null, null);
             Toast.makeText(con, "Message: " + message, Toast.LENGTH_SHORT).show();
             alertDialog.dismiss();
         });
@@ -174,7 +164,8 @@ public PositionRecyclerAdapter(Context con, ArrayList<Position> data) {
         TextView tvnum;
         TextView tvlongitude;
         TextView tvlatuitude;
-        ImageView callIcon,deleteIcon,mapIcon,msgIcon;
+        ImageView callIcon, deleteIcon, mapIcon, msgIcon;
+
         public MyViewHolder(@NonNull View v) {
             super(v);
 
@@ -187,8 +178,10 @@ public PositionRecyclerAdapter(Context con, ArrayList<Position> data) {
             this.tvlongitude = v.findViewById(R.id.tv_longitude);
             this.tvlatuitude = v.findViewById(R.id.tv_latitude);
         }
-}
+    }
+
     AlertDialog alert;
+
     class Delete extends AsyncTask {
 
         int id;
