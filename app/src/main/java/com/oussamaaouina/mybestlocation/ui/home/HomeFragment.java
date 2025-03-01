@@ -48,8 +48,8 @@ public class HomeFragment extends Fragment {
 
     RecyclerView rv;
     EditText searchContact;
-    ImageView addContact, logout;
     PositionRecyclerAdapter recyclerAdapter;
+
 
 
 
@@ -64,8 +64,8 @@ public class HomeFragment extends Fragment {
 
         rv = root.findViewById(R.id.rv_positions);
         searchContact = root.findViewById(R.id.search_position);
-        addContact = root.findViewById(R.id.add_contact_button);
-        logout = root.findViewById(R.id.logout_button);
+
+
 
         // excuting the download when the view created
         Download de = new Download();
@@ -86,6 +86,15 @@ public class HomeFragment extends Fragment {
             public void onClick(View v) {
                 NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_content_main);
                 navController.navigate(R.id.nav_slideshow);
+            }
+        });
+
+        //view location in map
+        binding.mapListButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_content_main);
+                navController.navigate(R.id.nav_gallery);
             }
         });
 
@@ -149,7 +158,7 @@ public class HomeFragment extends Fragment {
         protected Object doInBackground(Object[] objects) {
             // Code de thread secondaire (background)
             try {
-                Thread.sleep(2000);
+                Thread.sleep(200);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }

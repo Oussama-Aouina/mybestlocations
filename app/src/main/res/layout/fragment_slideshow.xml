@@ -1,108 +1,201 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_centerInParent="true"
+    android:layout_centerHorizontal="true"
+    android:layout_centerVertical="true"
     android:background="@color/backgroundColor"
-    android:gravity="center"
-    android:orientation="vertical"
-    android:padding="16dp"
-    tools:context=".ui.slideshow.SlideshowFragment">
-
-    <EditText
-        android:id="@+id/text_pseudo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
-        android:background="@drawable/edittext_background"
-        android:ems="10"
-        android:hint="Pseudo"
-        android:inputType="text"
-        android:padding="12dp"
-        android:textColorHint="@color/secondaryTextColor"
-        android:textColor="@color/primaryTextColor"
-        android:fontFamily="sans-serif-medium"/>
-
-    <EditText
-        android:id="@+id/text_numero"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
-        android:background="@drawable/edittext_background"
-        android:ems="10"
-        android:hint="Numero"
-        android:inputType="text"
-        android:padding="12dp"
-        android:textColorHint="@color/secondaryTextColor"
-        android:textColor="@color/primaryTextColor"
-        android:fontFamily="sans-serif-medium"/>
-
-    <EditText
-        android:id="@+id/text_longitude"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
-        android:background="@drawable/edittext_background"
-        android:ems="10"
-        android:hint="Longitude"
-        android:inputType="text"
-        android:padding="12dp"
-        android:textColorHint="@color/secondaryTextColor"
-        android:textColor="@color/primaryTextColor"
-        android:fontFamily="sans-serif-medium"/>
-
-    <EditText
-        android:id="@+id/text_latitude"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/edittext_background"
-        android:ems="10"
-        android:hint="Latitude"
-        android:inputType="text"
-        android:padding="12dp"
-        android:textColorHint="@color/secondaryTextColor"
-        android:textColor="@color/primaryTextColor"
-        android:fontFamily="sans-serif-medium"/>
+    tools:context=".ui.slideshow.AddLocationFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="16dp">
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="16dp">
 
-        <Button
-            android:id="@+id/back_btn"
-            android:layout_width="0dp"
+        <TextView
+            android:id="@+id/textView2"
+            style="@style/style_titre_1"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:backgroundTint="@color/primaryColor"
-            android:textColor="@color/white"
-            android:text="Back"
-            android:padding="12dp"
-            android:layout_marginEnd="8dp"/>
+            android:layout_marginBottom="14dp"
+            android:paddingTop="40dp"
+            android:text="New favourite location ?"
+            android:textColor="@color/primaryColor" />
 
-        <Button
-            android:id="@+id/map_btn"
-            android:layout_width="0dp"
+        <!-- Pseudo Field -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:backgroundTint="@color/primaryColor"
-            android:textColor="@color/white"
-            android:text="Map"
-            android:padding="12dp"
-            android:layout_marginEnd="8dp"/>
+            android:layout_marginBottom="12dp"
+            android:hint="Pseudo"
+            app:boxBackgroundMode="filled"
+            app:boxCornerRadiusBottomEnd="8dp"
+            app:boxCornerRadiusBottomStart="8dp"
+            app:boxCornerRadiusTopEnd="8dp"
+            app:boxCornerRadiusTopStart="8dp"
+            app:boxStrokeColor="@color/primaryColor"
+            app:hintTextColor="@color/secondaryTextColor">
 
-        <Button
-            android:id="@+id/add_btn"
-            android:layout_width="0dp"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/text_pseudo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:textColor="@color/primaryTextColor"
+                android:textColorHint="@color/secondaryTextColor" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Numero Field -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:backgroundTint="@color/primaryColor"
-            android:textColor="@color/white"
-            android:text="ADD"
-            android:padding="12dp"/>
+            android:layout_marginBottom="12dp"
+            android:hint="Number"
+            app:boxBackgroundMode="filled"
+            app:boxCornerRadiusBottomEnd="8dp"
+            app:boxCornerRadiusBottomStart="8dp"
+            app:boxCornerRadiusTopEnd="8dp"
+            app:boxCornerRadiusTopStart="8dp"
+            app:boxStrokeColor="@color/primaryColor"
+            app:hintTextColor="@color/secondaryTextColor">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/text_numero"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:textColor="@color/primaryTextColor"
+                android:textColorHint="@color/secondaryTextColor" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Longitude and Latitude Row -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <!-- Longitude Field -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:hint="Longitude"
+                app:boxBackgroundMode="filled"
+                app:boxCornerRadiusBottomEnd="8dp"
+                app:boxCornerRadiusBottomStart="8dp"
+                app:boxCornerRadiusTopEnd="8dp"
+                app:boxCornerRadiusTopStart="8dp"
+                app:boxStrokeColor="@color/primaryColor"
+                app:hintTextColor="@color/secondaryTextColor">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/text_longitude"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:cursorVisible="false"
+                    android:enabled="false"
+                    android:focusable="false"
+                    android:inputType="text"
+                    android:textColor="@color/primaryTextColor"
+                    android:textColorHint="@color/secondaryTextColor" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Latitude Field -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Latitude"
+                app:boxBackgroundMode="filled"
+                app:boxCornerRadiusBottomEnd="8dp"
+                app:boxCornerRadiusBottomStart="8dp"
+                app:boxCornerRadiusTopEnd="8dp"
+                app:boxCornerRadiusTopStart="8dp"
+                app:boxStrokeColor="@color/primaryColor"
+                app:hintTextColor="@color/secondaryTextColor">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/text_latitude"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:cursorVisible="false"
+                    android:enabled="false"
+                    android:focusable="false"
+                    android:inputType="text"
+                    android:textColor="@color/primaryTextColor"
+                    android:textColorHint="@color/secondaryTextColor" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <!-- Buttons Row -->
+        <!-- Buttons Row -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal">
+
+            <!-- Back Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/back_btn"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:padding="10dp"
+                android:text="Cancel"
+                android:textColor="@color/errorColor"
+                app:icon="@drawable/outline_cancel_24"
+                app:iconGravity="textStart"
+                app:iconPadding="7dp"
+                app:iconTint="@color/errorColor"
+                app:strokeColor="@color/errorColor"
+                app:strokeWidth="1dp" />
+
+            <!-- Map Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/map_btn"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:padding="10dp"
+                android:text="Map"
+                android:textColor="@color/primaryColor"
+                app:icon="@drawable/ic_map_location"
+                app:iconGravity="textStart"
+                app:iconPadding="8dp"
+                app:iconTint="@color/primaryColor"
+                app:strokeColor="@color/primaryColor"
+                app:strokeWidth="1dp" />
+
+            <!-- Add Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/add_btn"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="10dp"
+                android:text="Save"
+                android:textColor="@color/teal_700"
+                app:icon="@drawable/save_outlined"
+                app:iconGravity="textStart"
+                app:iconPadding="8dp"
+                app:iconTint="@color/teal_700"
+                app:strokeColor="@color/teal_700"
+                app:strokeWidth="1dp" />
+        </LinearLayout>
     </LinearLayout>
-
-</LinearLayout>
+</ScrollView>

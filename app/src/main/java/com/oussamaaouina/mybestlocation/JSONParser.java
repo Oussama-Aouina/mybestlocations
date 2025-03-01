@@ -163,7 +163,6 @@ public class JSONParser {
             conn.disconnect();
         }
 
-        conn.disconnect();
 
         // try parse the string to a JSON object
         try {
