@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/backgroundColor"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context=".Affichage">
+
+    <!-- Title -->
+
+    <TextView
+        android:id="@+id/textView"
+        style="@style/style_titre_1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="60dp"
+        android:text="Best Locations"
+        android:textColor="@color/primaryColor" />
+
+    <!-- ListView for Contact List -->
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/auth_name_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:hint="search"
+        app:hintTextAppearance="@style/TextAppearance.AppCompat.Small">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/search_position"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:textSize="16sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- Your RecyclerView -->
+
+
+        <!-- Add Floating Action Button (or ImageView) at the bottom-right corner -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:orientation="horizontal"
+            android:paddingBottom="20dp">
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Add Contact"
+                android:textAlignment="center"
+                android:textColor="@color/primaryColor" />
+
+            <ImageView
+                android:id="@+id/add_contact_button"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_gravity="bottom|end"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Add Contact"
+                android:elevation="8dp"
+                android:paddingLeft="0dp"
+                android:paddingTop="10dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="10dp"
+                android:src="@drawable/ic_add_contact" />
+
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/con_rv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:divider="@color/primaryTextColor"
+            android:dividerHeight="3dp"
+            android:scrollbars="vertical"
+            android:layout_marginBottom="90dp"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:orientation="horizontal"
+            android:paddingBottom="20dp"
+            android:textAlignment="center">
+
+            <ImageView
+                android:id="@+id/logout_button"
+                android:layout_width="wrap_content"
+                android:layout_height="80dp"
+                android:layout_gravity="bottom"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Add Contact"
+                android:elevation="8dp"
+                android:paddingLeft="15dp"
+                android:src="@drawable/logout" />
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Logout"
+                android:textAlignment="center"
+                android:textColor="@color/errorColor" />
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+</LinearLayout>
